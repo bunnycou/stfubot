@@ -1,5 +1,4 @@
-from fileinput import close
-import discord, json
+import discord, json, random, time, threading
 
 intents = discord.Intents.default()
 # intents.message_content = True
@@ -12,52 +11,80 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # if message.author.id not in deniedUsers:
-    #     print(f"messsage sender {message.author} not denied")
+    # create global vars
+    global msgCtr
+    global msgMax
+    global gifCtr
+    global gifMax
+    global timeCtr
 
-    if message.content.startswith("stfubot ignore"):
-        if f"{message.author.id}" in deniedUsers:
-            await message.delete()
-            print("Denied user tried to use ignore command")
-            return
+    # restrict the bot to only responding in dev channel for development purposes
+    if message.channel.id != 679005649757011969:
+        return
 
-        bannedID = message.content.split("ignore")[1].strip()[2:-1]
-        if bannedID in deniedUsers:
-            print("already denied this user")
-            print(deniedUsers)
-        else:
-            deniedUsers.append(bannedID)
-            open("banned.txt", "w").write("\n".join(deniedUsers))
-            close()
-            print(f"denied a new user, displaying full list")
-            print(deniedUsers)
+    # increment counters up as needed
+    msgCtr += 1
+    timeCtr = 0
+    if len(message.attachments) > 0 or message.content.startswith("http"):
+        gifCtr += 1 
 
-    elif message.content.startswith("stfubot allow"):
-        if f"{message.author.id}" in deniedUsers:
-            await message.delete()
-            print("Denied user tried to use allow command")
-            return
+    # run timer to reset counter
 
-        allowedID = message.content.split("allow")[1].strip()[2:-1]
-        if allowedID in deniedUsers:
-            deniedUsers.remove(allowedID)
-            open("banned.txt", "w").write("\n".join(deniedUsers))
-            close()
-            print(f"allowed a denied user, displaying full list")
-            print(deniedUsers)
-        else:
-            print("user is not denied")
+    # don't let bot talk to itself
+    if message.author == client.user:
+        return
 
-    elif (len(message.content) > 280 or message.content.startswith("http") or len(message.attachments) > 0) and f"{message.author.id}" in deniedUsers:
-        await message.delete()
-        print("Deleted message from denied user")
+    if msgCtr == msgMax or gifCtr == gifMax: 
+        await message.channel.send(responses[random.randint(0, len(responses)-1)])
+        msgCtr = 0
+        msgMax = random.randint(30, 40)
+        gifCtr = 0
+        gifMax = random.randint(5, 10)
+        
 
-# load our banned users
-deniedUsers = list()
-banfile = open("banned.txt", "r")
-for x in banfile.readlines():
-    deniedUsers.append(x.strip())
-banfile.close()
+    print(msgCtr, msgMax, gifCtr, gifMax)
+
+# global vars
+# response list
+responses = [
+"shut the fuck up",
+"shut the heck up",
+"shut the frick up",
+"zip your fuckin' lips",
+"why are you still talking?",
+"stop talking",
+"PLEASE stop talking",
+"I'm begging you, shut the fuck up already",
+"just stop talking",
+"please shut the fuck up already",
+"can you stop?",
+"can you just not talk?",
+"you are a waste of discord server space"
+"silence",
+"stop talking or else :gun:"
+]
+
+# message counters
+msgCtr = 0
+msgMax = random.randint(30, 40)
+gifCtr = 0
+gifMax = random.randint(5, 10)
+timeCtr = 0
+
+def timer():
+    global msgCtr
+    global gifCtr
+    global timeCtr
+    while True:
+        time.sleep(1)
+        timeCtr += 1
+        if timeCtr > 90:
+            msgCtr = 0
+            gifCtr = 0
+            timeCtr = 0
+
+t1 = threading.Thread(target=timer)
+t1.start()
 
 # load our api key
 secretfile = open("secret.json")

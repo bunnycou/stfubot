@@ -1,2 +1,2 @@
 # stfubot
-This bot will delete someone's discord message if it isn't only text and less than 280 characters for when you have annoying friends. 
+This bot will tell people to shut up when they've been spamming too much
