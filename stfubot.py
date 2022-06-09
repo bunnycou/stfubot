@@ -26,11 +26,27 @@ async def on_message(message):
             print("already denied this user")
             print(deniedUsers)
         else:
-            open("banned.txt", "a").write("\n" + bannedID)
-            close()
             deniedUsers.append(bannedID)
+            open("banned.txt", "w").write("\n".join(deniedUsers))
+            close()
             print(f"denied a new user, displaying full list")
             print(deniedUsers)
+
+    elif message.content.startswith("stfubot allow"):
+        if f"{message.author.id}" in deniedUsers:
+            await message.delete()
+            print("Denied user tried to use allow command")
+            return
+
+        allowedID = message.content.split("allow")[1].strip()[2:-1]
+        if allowedID in deniedUsers:
+            deniedUsers.remove(allowedID)
+            open("banned.txt", "w").write("\n".join(deniedUsers))
+            close()
+            print(f"allowed a denied user, displaying full list")
+            print(deniedUsers)
+        else:
+            print("user is not denied")
 
     elif (len(message.content) > 280 or message.content.startswith("http") or len(message.attachments) > 0) and f"{message.author.id}" in deniedUsers:
         await message.delete()
