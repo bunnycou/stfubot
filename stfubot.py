@@ -19,8 +19,8 @@ async def on_message(message):
     global timeCtr
 
     # restrict the bot to only responding in dev channel for development purposes
-    if message.channel.id != 679005649757011969:
-        return
+    # if message.channel.id != 679005649757011969:
+    #     return
 
     # increment counters up as needed
     msgCtr += 1
