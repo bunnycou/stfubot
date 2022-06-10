@@ -65,10 +65,10 @@ responses = [
 ]
 
 # max and min for msg and gif for easy rebalancing
-msgrMin = 15
-msgrMax = 20
-gifrMin = 3
-gifrMax = 5
+msgrMin = 30
+msgrMax = 40
+gifrMin = 4
+gifrMax = 6
 
 # message counters
 msgCtr = 0
