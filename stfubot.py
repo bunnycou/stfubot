@@ -59,7 +59,7 @@ responses = [
 "please shut the fuck up already",
 "can you stop?",
 "can you just not talk?",
-"you are a waste of discord server space"
+"you are a waste of discord server space",
 "silence",
 "stop talking or else :gun:"
 ]
