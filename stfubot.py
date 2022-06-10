@@ -37,9 +37,9 @@ async def on_message(message):
     if msgCtr == msgMax or gifCtr == gifMax: 
         await message.channel.send(responses[random.randint(0, len(responses)-1)])
         msgCtr = 0
-        msgMax = random.randint(30, 40)
+        msgMax = random.randint(msgrMin, msgrMax)
         gifCtr = 0
-        gifMax = random.randint(5, 10)
+        gifMax = random.randint(gifrMin, gifrMax)
         
 
     print(msgCtr, msgMax, gifCtr, gifMax)
@@ -64,11 +64,17 @@ responses = [
 "stop talking or else :gun:"
 ]
 
+# max and min for msg and gif for easy rebalancing
+msgrMin = 15
+msgrMax = 20
+gifrMin = 3
+gifrMax = 5
+
 # message counters
 msgCtr = 0
-msgMax = random.randint(30, 40)
+msgMax = random.randint(msgrMin, msgrMax)
 gifCtr = 0
-gifMax = random.randint(5, 10)
+gifMax = random.randint(gifrMin, gifrMax)
 timeCtr = 0
 
 def timer():
@@ -78,7 +84,7 @@ def timer():
     while True:
         time.sleep(1)
         timeCtr += 1
-        if timeCtr > 90:
+        if timeCtr > 60:
             msgCtr = 0
             gifCtr = 0
             timeCtr = 0
