@@ -22,17 +22,15 @@ async def on_message(message):
     # if message.channel.id != 679005649757011969:
     #     return
 
+    # don't let bot talk to itself or other bots
+    if message.author.bot:
+        return
+
     # increment counters up as needed
     msgCtr += 1
     timeCtr = 0
     if len(message.attachments) > 0 or message.content.startswith("http"):
         gifCtr += 1 
-
-    # run timer to reset counter
-
-    # don't let bot talk to itself
-    if message.author == client.user:
-        return
 
     if msgCtr == msgMax or gifCtr == gifMax: 
         await message.channel.send(responses[random.randint(0, len(responses)-1)])
